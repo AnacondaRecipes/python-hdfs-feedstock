@@ -10,7 +10,6 @@ source:
   sha256: ecd4650c39bb4f9421641320f4931edd81cf7126ae4e5ec880215adf6435df3d
 
 build:
-  noarch: python
   number: 0
   entry_points:
     - hdfscli = hdfs.__main__:main
