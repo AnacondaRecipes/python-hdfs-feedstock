@@ -46,10 +46,13 @@ test:
 
 about:
   home: http://hdfscli.readthedocs.org
+  description: |
+    API and command line interface for HDFS.
   license: MIT
   license_file: LICENSE
+  license_url: https://github.com/mtth/hdfs/blob/master/LICENSE
   summary: 'HdfsCLI: API and command line interface for HDFS.'
-
+  doc_url: https://github.com/mtth/hdfs/blob/master/doc/index.rst
 extra:
   recipe-maintainers:
     - mariusvniekerk
