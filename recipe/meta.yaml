@@ -1,4 +1,4 @@
-{% set version = "2.7.0" %}
+{% set version = "2.7.3" %}
 
 package:
   name: python-hdfs
@@ -6,8 +6,8 @@ package:
 
 source:
   fn: hdfs-{{ version }}.tar.gz
-  url: https://pypi.io/packages/source/h/hdfs/hdfs-{{ version }}.tar.gz
-  sha256: ecd4650c39bb4f9421641320f4931edd81cf7126ae4e5ec880215adf6435df3d
+  url: https://pypi.org/packages/source/h/hdfs/hdfs-{{ version }}.tar.gz
+  sha256: 752a21e43f82197dce43697c73f454ba490838108c73a57a9247efb66d1c0479
 
 build:
   number: 0
@@ -22,7 +22,6 @@ requirements:
     - python
     - setuptools
     - wheel
-
   run:
     - python
     - docopt
@@ -31,6 +30,10 @@ requirements:
     - requests >=2.7.0
     - requests-kerberos >=0.7.0
     - six >=1.9.0
+  run_constrained:
+    - fastavro >=0.21.19
+    - pandas >=0.14.1
+    - requests-kerberos >=0.7.0
 
 test:
   imports:
@@ -39,7 +42,6 @@ test:
     - hdfs.ext.avro
     - hdfs.ext.dataframe
     - hdfs.ext.kerberos
-
   commands:
     - hdfscli --help
     - hdfscli-avro --help
@@ -52,9 +54,10 @@ about:
   license_file: LICENSE
   license_url: https://github.com/mtth/hdfs/blob/master/LICENSE
   license_family: MIT
-  summary: 'HdfsCLI: API and command line interface for HDFS.'
+  summary: "HdfsCLI: API and command line interface for HDFS."
   doc_url: https://hdfscli.readthedocs.io/
   dev_url: https://github.com/mtth/hdfs/
+
 extra:
   recipe-maintainers:
     - mariusvniekerk
