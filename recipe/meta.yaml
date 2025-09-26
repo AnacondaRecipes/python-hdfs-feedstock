@@ -34,6 +34,11 @@ requirements:
     - requests-kerberos >=0.7.0
     - pandas >=0.14.1
 
+# E       PermissionError: [Errno 13] Permission denied: '/tmp/test.log'
+{% set deselect_tests = " --deselect=gh/test/test_config.py::TestConfig::test_get_file_handler" %}
+# E       PermissionError: [Errno 13] Permission denied: '/tmp/cmd.log'
+{% set deselect_tests = deselect_tests + " --deselect=gh/test/test_main.py::TestConfigureClient::test_with_alias" %}
+
 test:
   source_files:
     - gh/test
@@ -52,12 +57,12 @@ test:
     - pandas >=0.14.1
   commands:
     - pip check
-    - PYTHONPATH=. pytest -v gh/test
+    - PYTHONPATH=. pytest -v gh/test {{ deselect_tests }}
     - hdfscli --help
     - hdfscli-avro --help
 
 about:
-  home: http://hdfscli.readthedocs.org
+  home: https://hdfscli.readthedocs.org
   description: |
     API and command line interface for HDFS.
   license: MIT
