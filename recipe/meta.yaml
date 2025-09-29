@@ -57,7 +57,9 @@ test:
     - pandas >=0.14.1
   commands:
     - pip check
-    - PYTHONPATH=. pytest -v gh/test {{ deselect_tests }}
+    - export PYTHONPATH=.  # [unix]
+    - set PYTHONPATH=.  # [win]
+    - pytest -v gh/test {{ deselect_tests }}
     - hdfscli --help
     - hdfscli-avro --help
 
