@@ -6,11 +6,8 @@ package:
   version: {{ version }}
 
 source:
-  - url: https://pypi.org/packages/source/h/hdfs/hdfs-{{ version }}.tar.gz
-    sha256: 752a21e43f82197dce43697c73f454ba490838108c73a57a9247efb66d1c0479
-  - url:  https://github.com/mtth/hdfs/archive/refs/tags/v{{ version }}.tar.gz
-    sha256: 7bca499d0fee0bdcc89cc88b7e4e4f374dabb398e81dba79daad3b890ac85ece
-    folder: gh
+  url:  https://github.com/mtth/hdfs/archive/refs/tags/v{{ version }}.tar.gz
+  sha256: 7bca499d0fee0bdcc89cc88b7e4e4f374dabb398e81dba79daad3b890ac85ece
 
 build:
   number: 0
@@ -24,6 +21,7 @@ requirements:
     - pip
     - python
     - setuptools
+    - wheel
   run:
     - python
     - docopt
@@ -35,14 +33,14 @@ requirements:
     - pandas >=0.14.1
 
 # E       PermissionError: [Errno 13] Permission denied: '/tmp/test.log'
-{% set deselect_tests = " --deselect=gh/test/test_config.py::TestConfig::test_get_file_handler" %}
+{% set deselect_tests = " --deselect=test/test_config.py::TestConfig::test_get_file_handler" %}
 # E       PermissionError: [Errno 13] Permission denied: '/tmp/cmd.log'
-{% set deselect_tests = deselect_tests + " --deselect=gh/test/test_main.py::TestConfigureClient::test_with_alias" %}
+{% set deselect_tests = deselect_tests + " --deselect=test/test_main.py::TestConfigureClient::test_with_alias" %}
 
 test:
   source_files:
-    - gh/test
-    - gh/examples
+    - test
+    - examples
   imports:
     - hdfs
     - hdfs.ext
@@ -59,7 +57,7 @@ test:
     - pip check
     - export PYTHONPATH=.  # [unix]
     - set PYTHONPATH=.  # [win]
-    - pytest -v gh/test {{ deselect_tests }}
+    - pytest -v test {{ deselect_tests }}
     - hdfscli --help
     - hdfscli-avro --help
 
