@@ -1,20 +1,20 @@
-{% set version = "2.7.0" %}
+{% set name = "python-hdfs" %}
+{% set version = "2.7.3" %}
 
 package:
-  name: python-hdfs
+  name: {{ name|lower }}
   version: {{ version }}
 
 source:
-  fn: hdfs-{{ version }}.tar.gz
-  url: https://pypi.io/packages/source/h/hdfs/hdfs-{{ version }}.tar.gz
-  sha256: ecd4650c39bb4f9421641320f4931edd81cf7126ae4e5ec880215adf6435df3d
+  url:  https://github.com/mtth/hdfs/archive/refs/tags/v{{ version }}.tar.gz
+  sha256: 7bca499d0fee0bdcc89cc88b7e4e4f374dabb398e81dba79daad3b890ac85ece
 
 build:
   number: 0
   entry_points:
     - hdfscli = hdfs.__main__:main
     - hdfscli-avro = hdfs.ext.avro.__main__:main
-  script: python -m pip install --no-deps --ignore-installed .
+  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
 
 requirements:
   host:
@@ -22,39 +22,56 @@ requirements:
     - python
     - setuptools
     - wheel
-
   run:
     - python
     - docopt
-    - fastavro >=0.21.19
-    - pandas >=0.14.1
     - requests >=2.7.0
-    - requests-kerberos >=0.7.0
     - six >=1.9.0
+  run_constrained:
+    - fastavro >=0.21.19
+    - requests-kerberos >=0.7.0
+    - pandas >=0.14.1
+
+# E       PermissionError: [Errno 13] Permission denied: '/tmp/test.log'
+{% set deselect_tests = " --deselect=test/test_config.py::TestConfig::test_get_file_handler" %}
+# E       PermissionError: [Errno 13] Permission denied: '/tmp/cmd.log'
+{% set deselect_tests = deselect_tests + " --deselect=test/test_main.py::TestConfigureClient::test_with_alias" %}
 
 test:
+  source_files:
+    - test
+    - examples
   imports:
     - hdfs
     - hdfs.ext
     - hdfs.ext.avro
     - hdfs.ext.dataframe
     - hdfs.ext.kerberos
-
+  requires:
+    - pip
+    - pytest
+    - fastavro >=0.21.19
+    - requests-kerberos >=0.7.0
+    - pandas >=0.14.1
   commands:
+    - pip check
+    - export PYTHONPATH=.  # [unix]
+    - set PYTHONPATH=.  # [win]
+    - pytest -v test {{ deselect_tests }}
     - hdfscli --help
     - hdfscli-avro --help
 
 about:
-  home: http://hdfscli.readthedocs.org
+  home: https://hdfscli.readthedocs.org
   description: |
     API and command line interface for HDFS.
   license: MIT
   license_file: LICENSE
-  license_url: https://github.com/mtth/hdfs/blob/master/LICENSE
   license_family: MIT
-  summary: 'HdfsCLI: API and command line interface for HDFS.'
-  doc_url: https://hdfscli.readthedocs.io/
-  dev_url: https://github.com/mtth/hdfs/
+  summary: HdfsCLI is API and command line interface for HDFS.
+  doc_url: https://hdfscli.readthedocs.io
+  dev_url: https://github.com/mtth/hdfs
+
 extra:
   recipe-maintainers:
     - mariusvniekerk
